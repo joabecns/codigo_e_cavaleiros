@@ -67,6 +67,8 @@ class BattleScene(Scene):
         self.disp_enemy_hp = self.enemy.hp
         self.levels_gained = 0
         self.resolve_duration = 1.7
+        self.miss_streak = 0
+        game.audio.start_battle()  # o duelo sempre começa com a música equilibrada
 
     # ---------- estados ----------
     def set_state(self, name):
@@ -88,10 +90,12 @@ class BattleScene(Scene):
         audio = self.game.audio
         self.pending = []
         if res.correct:
+            self.miss_streak = 0
             audio.play("correct")
             self.pending.append((0.35, "foe_hurt", 0))
             self.resolve_duration = 1.9
         else:
+            self.miss_streak += 1
             audio.play("wrong")
             self.pending.append((0.25, "foe_rage", 0))
             for i, dmg in enumerate(res.hits):
@@ -145,12 +149,14 @@ class BattleScene(Scene):
             self.foe.play("lament", then="lament")
             self.hero.play("cheer", then="cheer")
             self.game.audio.play("win")
+            self.game.audio.play_music("victory")
             self.set_state("victory")
         elif res.player_defeated:
             self.session.absorb(self.bm)
             self.hero.play("lament", then="lament")
             self.foe.play("cheer", then="cheer")
             self.game.audio.play("lose")
+            self.game.audio.play_music("danger")
             self.set_state("defeat")
         elif res.round_finished:
             self.set_state("banner")
@@ -195,10 +201,26 @@ class BattleScene(Scene):
         elif self.state == "defeat" and self.state_time > 1.5:
             self.game.retry_stage()
 
+    # ---------- música dinâmica ----------
+    def _tension(self):
+        """0 = luta equilibrada, 1 = jogador claramente perdendo.
+
+        Sobe quando o herói fica atrás em HP em relação ao vilão e a cada erro seguido;
+        um acerto zera a sequência de erros, então a música volta a se equilibrar.
+        """
+        hero = self.disp_hero_hp / max(1, self.player.max_hp)
+        foe = self.disp_enemy_hp / max(1, self.enemy.max_hp)
+        t = max((foe - hero) / 0.35, self.miss_streak * 0.4)
+        if hero < 0.3:
+            t = max(t, 0.85)
+        return max(0.0, min(1.0, t))
+
     # ---------- atualização ----------
     def update(self, dt):
         self.t += dt
         self.state_time += dt
+        if self.state not in ("victory", "defeat"):
+            self.game.audio.set_tension(self._tension())
         self.shake = max(0.0, self.shake - dt)
         self.hero.update(dt)
         self.foe.update(dt)

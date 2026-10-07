@@ -6,7 +6,7 @@ import pygame
 from src import settings as S
 from src.scenes.scene import Scene
 from src.ui.drawing import draw_panel, draw_text, gradient
-from src.ui.widgets import Button
+from src.ui.widgets import Button, Slider
 
 
 class _ButtonScene(Scene):
@@ -85,25 +85,45 @@ class SettingsScene(_ButtonScene):
     def __init__(self, game):
         super().__init__(game)
         self.bg = gradient((S.WIDTH, S.HEIGHT), (12, 14, 40), (45, 22, 75))
+        a = game.audio
+        self.music_slider = Slider((340, 140, 600, 70), "Música", lambda: a.music_volume, a.set_music_volume)
+        self.sfx_slider = Slider((340, 222, 600, 70), "Efeitos", lambda: a.sfx_volume, self._set_sfx)
         self.buttons = [
-            Button((440, 150, 400, 64), "", self.toggle_music),
-            Button((440, 232, 400, 64), "", self.toggle_sfx),
-            Button((440, 314, 400, 64), "Voltar", game.go_menu),
+            self.music_slider,
+            self.sfx_slider,
+            Button((440, 304, 400, 64), "Voltar", game.go_menu),
         ]
-        self._refresh()
+        self.dragging = None
 
-    def _refresh(self):
-        a = self.game.audio
-        self.buttons[0].text = f"Música: {'LIGADA' if a.music_on else 'DESLIGADA'}"
-        self.buttons[1].text = f"Efeitos: {'LIGADOS' if a.sfx_on else 'DESLIGADOS'}"
+    def _set_sfx(self, value):
+        changed = abs(value - self.game.audio.sfx_volume) > 1e-3
+        self.game.audio.set_sfx_volume(value)
+        if changed:
+            self.game.audio.play("click")  # prévia do novo volume dos efeitos
 
-    def toggle_music(self):
-        self.game.audio.set_music(not self.game.audio.music_on)
-        self._refresh()
-
-    def toggle_sfx(self):
-        self.game.audio.set_sfx(not self.game.audio.sfx_on)
-        self._refresh()
+    def handle_events(self, events):
+        rest = []
+        for e in events:
+            current = self.buttons[self.selected]
+            if e.type == pygame.KEYDOWN and e.key in (pygame.K_LEFT, pygame.K_a, pygame.K_RIGHT, pygame.K_d):
+                if isinstance(current, Slider):
+                    current.nudge(-1 if e.key in (pygame.K_LEFT, pygame.K_a) else 1)
+                continue
+            if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
+                slider = next((s for s in (self.music_slider, self.sfx_slider) if s.hit_bar(e.pos)), None)
+                if slider:
+                    self.dragging = slider
+                    self.selected = self.buttons.index(slider)
+                    slider.set_from_x(e.pos[0])
+                    continue
+            elif e.type == pygame.MOUSEMOTION and self.dragging:
+                self.dragging.set_from_x(e.pos[0])
+                continue
+            elif e.type == pygame.MOUSEBUTTONUP and e.button == 1:
+                self.dragging = None
+                continue
+            rest.append(e)
+        super().handle_events(rest)
 
     def on_escape(self):
         self.game.go_menu()
@@ -116,6 +136,8 @@ class SettingsScene(_ButtonScene):
         draw_text(screen, "Configurações", 72, S.GOLD, (S.WIDTH // 2, 70), "center", bold=True, shadow=True)
         for i, b in enumerate(self.buttons):
             b.draw(screen, i == self.selected)
+        draw_text(screen, "Setas esquerda/direita ou arraste: volume   |   ENTER: mudo   |   ESC: voltar", 22,
+                  (190, 200, 240), (S.WIDTH // 2, 388), "center")
         draw_panel(screen, (240, 410, 800, 250))
         draw_text(screen, "Como jogar", 40, S.GOLD, (S.WIDTH // 2, 440), "center", bold=True)
         tips = ["Responda com as teclas 1-4 ou clicando na alternativa.",

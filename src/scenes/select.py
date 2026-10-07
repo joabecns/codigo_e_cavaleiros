@@ -52,7 +52,7 @@ class SelectScene(Scene):
             return
         self.index = (self.index + step) % len(self.keys)
         self.t = 0.0
-        self.game.audio.play("click")
+        self.game.audio.play("select")
 
     def _confirm(self):
         if self.confirm_left <= 0:

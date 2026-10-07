@@ -34,6 +34,7 @@ class Game:
 
     def go_menu(self):
         self.session = None
+        self.audio.play_music("menu")
         self.change_scene(MenuScene(self))
 
     def go_settings(self):
@@ -70,6 +71,7 @@ class Game:
                 self.running = False
         self.scene.handle_events(events)
         self.scene.update(dt)
+        self.audio.update(dt)
         if self.session and self.session.clock_running:
             self.session.elapsed += dt
         self.scene.draw(self.screen)
