@@ -42,9 +42,10 @@ namespace CodigoECavaleiros.Combat
             bank = QuestionBank.FromResources();
             ui = gameObject.AddComponent<BattleUI>();
             ui.Build();
-            ui.OptionChosen += i => { if (!answerReceived) { picked = i; answerReceived = true; AudioManager.Sfx("sfx_click"); } };
-            ui.SkillToggled += () => { if (bm != null) { bm.ToggleSkill(); RefreshSkill(); if (bm.SkillArmed) AudioManager.Sfx("sfx_skill"); else AudioManager.Sfx("sfx_click"); } };
-            ui.Continue += () => continuePressed = true;
+            ui.OptionChosen += i => { if (!PauseMenu.Paused && !answerReceived) { picked = i; answerReceived = true; AudioManager.Sfx("sfx_click"); } };
+            ui.SkillToggled += () => { if (bm != null && !PauseMenu.Paused) { bm.ToggleSkill(); RefreshSkill(); if (bm.SkillArmed) AudioManager.Sfx("sfx_skill"); else AudioManager.Sfx("sfx_click"); } };
+            ui.Continue += () => { if (!PauseMenu.Paused) continuePressed = true; };
+            gameObject.AddComponent<PauseMenu>();
 
             SpawnHero();
             StartCoroutine(RunGame());

@@ -42,6 +42,7 @@ namespace CodigoECavaleiros.Audio
             {
                 sfxSources[i] = gameObject.AddComponent<AudioSource>();
                 sfxSources[i].playOnAwake = false;
+                sfxSources[i].ignoreListenerPause = true;
             }
             muted = PlayerPrefs.GetInt("muted", 0) == 1;
             AudioListener.pause = false;

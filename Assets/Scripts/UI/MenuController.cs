@@ -75,8 +75,7 @@ namespace CodigoECavaleiros.UI
             MakeMenuButton(p, "COMO JOGAR", 0.30f, new Color(0.25f, 0.40f, 0.75f), () => SetScreen(Screen.ComoJogar));
             MakeMenuButton(p, "SAIR", 0.18f, new Color(0.55f, 0.25f, 0.30f), Quit);
 
-            UIKit.Text("Rodape", p, "Projeto de Inteligência Artificial • 5 fases • 5 perguntas por rodada", 26, new Color(1, 1, 1, 0.6f),
-                TextAlignmentOptions.Left, new Vector2(0.05f, 0.03f), new Vector2(0.7f, 0.09f));
+            
         }
 
                 // ------------------------------------------------------------------ símbolo de IA / tecnologia
@@ -141,9 +140,7 @@ namespace CodigoECavaleiros.UI
                     MakeImg("Brilho", box, dot, new Color(cyan.r, cyan.g, cyan.b, 0.18f), pt, new Vector2(64, 64));
                     nodes.Add(MakeImg("Neuronio", box, dot, cyan, pt, new Vector2(34, 34)));
                 }
-            var lbl = UIKit.Text("LegendaIA", box, "INTELIGÊNCIA ARTIFICIAL", 34, cyan, TextAlignmentOptions.Center, new Vector2(0f, 0.01f), new Vector2(1f, 0.08f));
-            lbl.fontStyle = FontStyles.Bold;
-        }
+                    }
 
         void PulseSymbol()
         {
