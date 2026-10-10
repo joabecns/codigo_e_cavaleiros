@@ -1,0 +1,23 @@
+{
+ "hero_leo":   {"kind":"hero","name":"Leo","skin":[240,190,150],"scale":1.0,
+   "parts":[["Hairstyle_male_010",null],["T-Shirt_009",null],["Pants_010",null],["Shoe_Sneakers_009",null]]},
+ "hero_theo":  {"kind":"hero","name":"Theo","skin":[198,134,90],"scale":1.0,
+   "parts":[["Hairstyle_male_012",null],["Outwear_036",null],["Pants_014",null],["Glasses_004",null],["Shoe_Slippers_005",null]]},
+ "hero_bruno": {"kind":"hero","name":"Bruno","skin":[128,86,58],"scale":1.0,
+   "parts":[["Headphones_002",null],["Outwear_029",null],["Shorts_003",null],["Socks_008",null],["Shoe_Sneakers_009",null]]},
+ "hero_max":   {"kind":"hero","name":"Max","skin":[233,170,130],"scale":1.0,
+   "parts":[["Hat_010",null],["T-Shirt_009",[214,58,60]],["Shorts_003",[60,92,180]],["Shoe_Slippers_002",null],["Moustache_002",null]]},
+ "hero_caio":  {"kind":"hero","name":"Caio","skin":[252,205,170],"scale":1.0,
+   "parts":[["Hat_049",null],["T-Shirt_009",[130,80,190]],["Pants_010",null],["Glasses_006",null],["Shoe_Sneakers_009",null]]},
+
+ "vil_palhaco":{"kind":"enemy","name":"Palhaço Bug","skin":[236,226,216],"scale":1.0,
+   "parts":[["Costume_10_001",null],["Clown_nose_001",null],["Gloves_014",null]]},
+ "vil_rato":   {"kind":"enemy","name":"Rato Loop","skin":[150,166,140],"scale":1.0,
+   "parts":[["Costume_6_001",null],["Gloves_014",null]]},
+ "vil_coelho": {"kind":"enemy","name":"Coelho Nulo","skin":[205,190,205],"scale":1.0,
+   "parts":[["Hat_049",[48,48,62]],["Outwear_036",[36,34,48]],["Pants_014",null],["Gloves_014",null],["Glasses_004",null],["Shoe_Sneakers_009",[30,30,36]]]},
+ "vil_sargento":{"kind":"enemy","name":"Sargento Herança","skin":[196,140,112],"scale":1.0,
+   "parts":[["Hat_057",null],["Moustache_002",null],["Outwear_029",[70,84,52]],["Pants_010",[46,52,44]],["Gloves_006",null],["Shoe_Sneakers_009",[30,30,36]]]},
+ "boss_capitao":{"kind":"enemy","name":"Compilador Sombrio","skin":[112,150,102],"scale":1.28,
+   "parts":[["Hat_057",null],["Glasses_006",null],["Moustache_001",null],["Outwear_029",[28,26,34]],["Pants_014",null],["Gloves_014",[160,24,34]],["Shoe_Sneakers_009",[30,30,36]]]}
+}
