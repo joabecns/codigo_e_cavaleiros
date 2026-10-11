@@ -11,7 +11,7 @@ using CodigoECavaleiros.Characters;
 namespace CodigoECavaleiros.UI
 {
     /// <summary>
-    /// Menu inicial + escolha do herói. O herói escolhido fica em GameSession.HeroIndex
+    /// Menu inicial + escolha do BugHunter. O BugHunter escolhido fica em GameSession.HeroIndex
     /// e acompanha o jogador até o fim da jornada. Vilões e chefe não são selecionáveis.
     /// </summary>
     public class MenuController : MonoBehaviour
@@ -24,14 +24,17 @@ namespace CodigoECavaleiros.UI
         enum Screen { Principal, ComoJogar, Selecao }
         Screen screen = Screen.Principal;
 
-        static readonly string[] HeroTitles = { "Leo", "Theo", "Bruno", "Max", "Caio" };
+        static readonly string[] HeroTitles = { "Leo", "Theo", "Bruno", "Max", "Caio", "Luna", "Bia", "Nina" };
         static readonly string[] HeroBlurbs =
         {
             "Curioso e determinado. Aprende com cada erro.",
             "Observador e cheio de estilo. Nada passa pelos óculos dele.",
             "Calmo sob pressão. Respira fundo antes de responder.",
             "Ritmo e foco: com o fone nos ouvidos, resolve qualquer bug.",
-            "Estrategista. Planeja cada resposta antes de agir."
+            "Estrategista. Planeja cada resposta antes de agir.",
+            "Criativa e intuitiva. Para ela, cada bug é um enigma a resolver.",
+            "Rápida e objetiva. Corta o problema pela raiz.",
+            "Energia de sobra. Aprende brincando e nunca desiste."
         };
 
         RectTransform root;
@@ -201,7 +204,7 @@ namespace CodigoECavaleiros.UI
                 "• Cada luta tem perguntas de programação. Responda antes que o tempo acabe.\n" +
                 "• <color=#7CFF9A>Acertou:</color> o vilão se abala e perde vida. Acertos seguidos formam um <color=#FFDC6E>combo</color> com mais dano.\n" +
                 "• <color=#FF7A7A>Errou ou o tempo acabou:</color> o vilão fica furioso, escolhe um ataque ao acaso e você perde vida.\n" +
-                "• <color=#C79BFF>Depurar (tecla S):</color> gasta Foco e aumenta o dano do próximo acerto.\n" +
+                "• <color=#C79BFF>Depurar (tecla S):</color> libera a cada 3 acertos e dá +50% de dano no próximo acerto.\n" +
                 "• Cada rodada tem 5 perguntas. Vença os 4 vilões e derrote o Compilador Sombrio!\n" +
                 "• Teclas: 1 a 4 para responder, S para Depurar. O mouse também funciona.",
                 36, Color.white, TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.20f), new Vector2(0.94f, 0.80f));
@@ -218,7 +221,7 @@ namespace CodigoECavaleiros.UI
             var p = UIKit.Stretch("Selecao", root, Vector2.zero, Vector2.one);
             selectPanel = p.gameObject;
 
-            var head = UIKit.Text("Titulo", p, "ESCOLHA SEU HERÓI", 84, UIKit.Gold, TextAlignmentOptions.Center, new Vector2(0.1f, 0.84f), new Vector2(0.9f, 0.97f));
+            var head = UIKit.Text("Titulo", p, "ESCOLHA SEU BUGHUNTER", 84, UIKit.Gold, TextAlignmentOptions.Center, new Vector2(0.1f, 0.84f), new Vector2(0.9f, 0.97f));
             head.fontStyle = FontStyles.Bold;
             UIKit.Text("Aviso", p, "Arraste para girar 360° • Dois cliques para escolher", 34, new Color(1, 1, 1, 0.75f), TextAlignmentOptions.Center, new Vector2(0.2f, 0.78f), new Vector2(0.8f, 0.85f));
 

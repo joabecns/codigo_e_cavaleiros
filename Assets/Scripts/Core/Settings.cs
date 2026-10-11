@@ -13,11 +13,10 @@ namespace CodigoECavaleiros
         public const float BossFinalPhaseTime = 10f;
         public const int TotalStages = 5; // 4 inimigos comuns + chefão
 
-        public const int PlayerHp = 100, PlayerFc = 30, PlayerAtk = 12, PlayerDef = 4;
+        public const int PlayerHp = 100, PlayerAtk = 12, PlayerDef = 4;
         public const int MaxLevel = 5;
-        public const int SkillCost = 8;
+        public const int HitsForSkill = 3;   // acertos necessários para liberar o Depurar
         public const float SkillMult = 1.5f;
-        public const int FcPerHit = 4;
         public const float HealBetweenFights = 0.35f;
 
         public static readonly string[] AllTopics = { "variaveis", "repeticao", "funcoes", "poo", "ia" };

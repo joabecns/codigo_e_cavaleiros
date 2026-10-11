@@ -92,7 +92,7 @@ namespace CodigoECavaleiros.UI
         {
             var box = MakeRect("CaixaHeroi", root, new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0), new Vector2(-40, 360), new Vector2(620, 160));
             AddImage(box.gameObject, Panel);
-            playerName = MakeText("Nome", box, "Herói", 40, Color.white, TextAlignmentOptions.Left, new Vector2(0.04f, 0.62f), new Vector2(0.96f, 0.98f));
+            playerName = MakeText("Nome", box, "BugHunter", 40, Color.white, TextAlignmentOptions.Left, new Vector2(0.04f, 0.62f), new Vector2(0.96f, 0.98f));
             playerName.fontStyle = FontStyles.Bold;
             MakeBar(box, new Vector2(0.04f, 0.42f), new Vector2(0.96f, 0.56f), out playerFill, out playerFillImg);
             playerHpText = MakeText("HP", box, "", 26, Color.white, TextAlignmentOptions.Right, new Vector2(0.5f, 0.56f), new Vector2(0.96f, 0.72f));
@@ -183,7 +183,7 @@ namespace CodigoECavaleiros.UI
         {
             playerName.text = name + "  Nv." + level;
             playerHpText.text = hp + " / " + maxHp;
-            playerFcText.text = "Foco " + fc + "/" + maxFc;
+            playerFcText.text = fc >= maxFc ? "Depurar: PRONTO" : "Depurar: " + fc + "/" + maxFc;
             comboText.text = combo;
             playerTarget = maxHp > 0 ? (float)hp / maxHp : 0f;
             if (instant) playerShown = playerTarget;
@@ -216,9 +216,9 @@ namespace CodigoECavaleiros.UI
             timerFillImg.color = ratio > 0.5f ? new Color(0.4f, 0.9f, 0.5f) : (ratio > 0.25f ? new Color(1f, 0.8f, 0.3f) : new Color(1f, 0.35f, 0.35f));
         }
 
-        public void SetSkill(bool armed, bool available, int cost)
+        public void SetSkill(bool armed, bool available, int charge, int needed)
         {
-            skillLabel.text = armed ? "DEPURAR ATIVO  (S)" : "Depurar  -" + cost + " Foco  (S)";
+            skillLabel.text = armed ? "DEPURAR ATIVO  (S)" : (available ? "DEPURAR PRONTO!  (S)" : "Depurar: " + charge + "/" + needed + " acertos");
             skillImage.color = armed ? new Color(0.95f, 0.65f, 0.15f) : (available ? new Color(0.55f, 0.35f, 0.75f) : new Color(0.3f, 0.3f, 0.35f));
         }
 

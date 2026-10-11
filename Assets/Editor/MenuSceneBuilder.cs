@@ -12,7 +12,7 @@ namespace CodigoECavaleiros.EditorTools
     {
         const string MenuPath = "Assets/Scenes/Menu.unity";
         const string BattlePath = "Assets/Scenes/Batalha.unity";
-        static readonly string[] Heroes = { "Hero_Leo", "Hero_Theo", "Hero_Bruno", "Hero_Max", "Hero_Caio" };
+        static readonly string[] Heroes = { "Hero_Leo", "Hero_Theo", "Hero_Bruno", "Hero_Max", "Hero_Caio", "Hero_Luna", "Hero_Bia", "Hero_Nina" };
 
         [MenuItem("Tools/Código & Cavaleiros/Construir Cena de Menu")]
         public static void Build()

@@ -11,7 +11,7 @@ namespace CodigoECavaleiros.Combat
         public int? Chosen;
         public bool Correct, TimedOut;
         public int Streak, DamageDealt;
-        public bool SkillUsed;
+        public bool SkillUsed, SkillBecameReady;
         public EnemyAttack? EnemyAttack;
         public List<int> Hits = new List<int>();
         public bool RoundFinished, EnemyDefeated, PlayerDefeated, PhaseChanged;
@@ -28,6 +28,9 @@ namespace CodigoECavaleiros.Combat
         public int TotalAsked { get; private set; }
         public int CorrectTotal { get; private set; }
         public bool SkillArmed { get; private set; }
+        /// <summary>Acertos acumulados para o Depurar (0 até HitsForSkill).</summary>
+        public int SkillCharge { get; private set; }
+        public bool SkillReady { get { return SkillCharge >= Settings.HitsForSkill; } }
         public Question Current { get; private set; }
         /// <summary>tópico -> [acertos, total]</summary>
         public Dictionary<string, int[]> Stats { get; private set; }
@@ -49,11 +52,11 @@ namespace CodigoECavaleiros.Combat
             return Current;
         }
 
-        /// <summary>Arma/desarma o "Depurar" (só arma se houver Foco suficiente).</summary>
+        /// <summary>Arma/desarma o "Depurar" (só arma quando a carga de 3 acertos estiver completa).</summary>
         public bool ToggleSkill()
         {
             if (SkillArmed) SkillArmed = false;
-            else if (Player.Fc >= Settings.SkillCost) SkillArmed = true;
+            else if (SkillReady) SkillArmed = true;
             return SkillArmed;
         }
 
@@ -72,6 +75,7 @@ namespace CodigoECavaleiros.Combat
             if (q == null) throw new InvalidOperationException("Nenhuma questão ativa");
             bool correct = chosen.HasValue && chosen.Value == q.answer;
             int phaseBefore = Enemy.Phase;
+            bool readyBefore = SkillReady;
             Combo.Register(correct);
             var res = new TurnResult { Question = q, Chosen = chosen, Correct = correct, TimedOut = !chosen.HasValue, Streak = Combo.Streak };
 
@@ -84,13 +88,14 @@ namespace CodigoECavaleiros.Combat
                 stat[0]++;
                 CorrectTotal++;
                 float mult = Combo.Multiplier();
-                if (SkillArmed && Player.SpendFc(Settings.SkillCost))
+                if (SkillArmed && SkillReady)
                 {
                     res.SkillUsed = true;
                     mult *= Settings.SkillMult;
+                    SkillCharge = 0;
                 }
                 res.DamageDealt = Enemy.ReceiveDamage(CalcDamage(mult));
-                Player.GainFc(Settings.FcPerHit);
+                if (!res.SkillUsed) SkillCharge = Math.Min(Settings.HitsForSkill, SkillCharge + 1);
             }
             else
             {
@@ -104,6 +109,7 @@ namespace CodigoECavaleiros.Combat
             }
 
             SkillArmed = false;
+            res.SkillBecameReady = !readyBefore && SkillReady;
             Current = null;
             AskedInRound++;
             TotalAsked++;

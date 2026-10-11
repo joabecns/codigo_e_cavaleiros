@@ -75,13 +75,13 @@ namespace CodigoECavaleiros.Combat
             string info = "Fase " + (stage + 1) + "/" + Settings.TotalStages + "   Rodada " + bm.Round + "   " + enemy.TopicLabel;
             if (enemy is Boss) info += "   Fase do chefe " + enemy.Phase;
             ui.SetEnemy(enemy.Name, info, enemy.Hp, enemy.MaxHp, instant);
-            ui.SetPlayer(player.Name, player.Level, player.Hp, player.MaxHp, player.Fc, player.MaxFc, bm.Combo.Label(), instant);
+            ui.SetPlayer(player.Name, player.Level, player.Hp, player.MaxHp, bm.SkillCharge, Settings.HitsForSkill, bm.Combo.Label(), instant);
             RefreshSkill();
         }
 
         void RefreshSkill()
         {
-            ui.SetSkill(bm.SkillArmed, player.Fc >= Settings.SkillCost, Settings.SkillCost);
+            ui.SetSkill(bm.SkillArmed, bm.SkillReady, bm.SkillCharge, Settings.HitsForSkill);
         }
 
         // ------------------------------------------------------------------ fluxo do jogo
@@ -184,6 +184,7 @@ namespace CodigoECavaleiros.Combat
                 text = "<color=#7CFF9A>Acertou!</color>  Dano: " + r.DamageDealt;
                 if (r.SkillUsed) text += "  (Depurar!)";
                 if (r.Streak >= 2) text += "\n<size=65%>" + bm.Combo.Label() + "</size>";
+                if (r.SkillBecameReady) { text += "\n<size=65%><color=#C79BFF>Depurar pronto! (tecla S)</color></size>"; AudioManager.Sfx("sfx_skill", 0.7f); }
             }
             else
             {

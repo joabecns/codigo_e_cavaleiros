@@ -59,22 +59,46 @@ namespace CodigoECavaleiros.Tests
         }
 
         [Test]
-        public void Skill_CostsFocusAndAddsDamage()
+        public void Skill_LockedUntilThreeHits()
         {
             Player p; Enemy e; var bm = Make(out p, out e);
-            Assert.IsTrue(bm.ToggleSkill());
-            var res = bm.Answer(bm.NextQuestion().answer);
-            Assert.IsTrue(res.SkillUsed);
-            Assert.AreEqual(Settings.PlayerFc - Settings.SkillCost + Settings.FcPerHit, p.Fc);
-            Assert.AreEqual(bm.CalcDamage(1.0f * Settings.SkillMult), res.DamageDealt);
+            Assert.IsFalse(bm.SkillReady);
+            Assert.IsFalse(bm.ToggleSkill());
+            for (int i = 0; i < Settings.HitsForSkill - 1; i++)
+            {
+                bm.Answer(bm.NextQuestion().answer);
+                Assert.IsFalse(bm.SkillReady);
+            }
+            var third = bm.Answer(bm.NextQuestion().answer);
+            Assert.IsTrue(bm.SkillReady);
+            Assert.IsTrue(third.SkillBecameReady);
         }
 
         [Test]
-        public void Skill_NotArmedWithoutFocus()
+        public void Skill_UsedAfterThreeHits_ConsumesChargeAndAddsDamage()
+        {
+            var boss = new CompiladorSombrio();
+            var bm = new BattleManager(new Player(), boss, NewBank());
+            for (int i = 0; i < Settings.HitsForSkill; i++) bm.Answer(bm.NextQuestion().answer);
+            Assert.IsTrue(bm.ToggleSkill());
+            var res = bm.Answer(bm.NextQuestion().answer);
+            Assert.IsTrue(res.SkillUsed);
+            Assert.AreEqual(0, bm.SkillCharge);
+            Assert.IsFalse(bm.SkillReady);
+            float comboMult = 1f + ComboSystem.Step * ComboSystem.MaxSteps;
+            Assert.AreEqual(bm.CalcDamage(comboMult * Settings.SkillMult), res.DamageDealt);
+        }
+
+        [Test]
+        public void Skill_ChargeKeptOnWrongAnswer()
         {
             Player p; Enemy e; var bm = Make(out p, out e);
-            p.SpendFc(p.Fc);
-            Assert.IsFalse(bm.ToggleSkill());
+            for (int i = 0; i < Settings.HitsForSkill; i++) bm.Answer(bm.NextQuestion().answer);
+            Assert.IsTrue(bm.ToggleSkill());
+            bm.NextQuestion();
+            bm.Answer(null);
+            Assert.IsTrue(bm.SkillReady);
+            Assert.IsFalse(bm.SkillArmed);
         }
 
         [Test]

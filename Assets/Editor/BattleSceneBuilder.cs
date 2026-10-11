@@ -12,7 +12,7 @@ namespace CodigoECavaleiros.EditorTools
     {
         const string ScenePath = "Assets/Scenes/Batalha.unity";
         const string MatDir = "Assets/Materials/Battle/";
-        static readonly string[] Heroes = { "Hero_Leo", "Hero_Theo", "Hero_Bruno", "Hero_Max", "Hero_Caio" };
+        static readonly string[] Heroes = { "Hero_Leo", "Hero_Theo", "Hero_Bruno", "Hero_Max", "Hero_Caio", "Hero_Luna", "Hero_Bia", "Hero_Nina" };
 
         static Material Mat(string name, Color c)
         {
